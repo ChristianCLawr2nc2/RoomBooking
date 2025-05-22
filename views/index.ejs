@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title><%= titulo %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main class="container">
+    <h1><%= mensagem %></h1>
+    <p>Reserve suas salas aqui.</p>
+  </main>
+
+
+  <section class="container">
+    <h2>Reservas</h2>
+    <p>Lista de reservas:</p>
+
+    <table border="1" id="reservasTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>sala</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="3">Carregando reservas...</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script src="/js/reservas.js"></script>
+
+    
+
+
+    
+
+  <%- include('partials/footer') %>
+</body>
+</html>

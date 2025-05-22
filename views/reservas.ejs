@@ -1,0 +1,54 @@
+<h2>reservas</h2>
+<p>Lista de reservas:</p>
+
+<table border="1" id="reservasTable">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>sala</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="3">Carregando reservas...</td>
+    </tr>
+  </tbody>
+</table>
+
+<script>
+  // Função para buscar usuários da API e renderizar na tabela
+  async function fetchReservas() {
+    try {
+      const response = await fetch('/reservas');
+      if (!response.ok) {
+        throw new Error('Erro ao buscar reservas');
+      }
+      const reservas = await response.json();
+
+      const tableBody = document.querySelector('#reservasTable tbody');
+      tableBody.innerHTML = ''; // Limpa o conteúdo anterior
+
+      if (reservas.length > 0) {
+        reservas.forEach(reserva => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${reserva.id}</td>
+            <td>${reserva.nome}</td>
+            <td>${reserva.sala}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="3">Nenhuma reserva encontrada.</td></tr>';
+      }
+    } catch (error) {
+      console.error(error);
+      const tableBody = document.querySelector('#reservasTable tbody');
+      tableBody.innerHTML = '<tr><td colspan="3">Erro ao carregar reservas.</td></tr>';
+    }
+  }
+
+  // Chama a função ao carregar a página
+  fetchReservas();
+</script>
