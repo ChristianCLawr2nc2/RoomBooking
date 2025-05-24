@@ -1,5 +1,3 @@
-// controllers/salaController.js
-
 const salaService = require('../services/salaServices');
 
 const getAllSala = async (req, res) => {
@@ -13,11 +11,11 @@ const getAllSala = async (req, res) => {
 
 const getSalaById = async (req, res) => {
   try {
-    const sala = await salaService.getSalaById(req.params.sala_id);
+    const salas = await salaService.getSalaById(req.params.sala_id);
     if (sala) {
       res.status(200).json(sala);
     } else {
-      res.status(404).json({ error: 'Usuário não encontrado' });
+      res.status(404).json({ error: 'Salas não encontradas' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -41,7 +39,7 @@ const updateSala = async (req, res) => {
     if (updatedSala) {
       res.status(200).json(updatedSala);
     } else {
-      res.status(404).json({ error: 'Usuário não encontrado' });
+      res.status(404).json({ error: 'Salas não encontradas' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -54,7 +52,7 @@ const deleteSala = async (req, res) => {
     if (deletedSala) {
       res.status(200).json(deletedSala);
     } else {
-      res.status(404).json({ error: 'Usuário não encontrado' });
+      res.status(404).json({ error: 'Salas não encontradas' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -73,6 +71,13 @@ const listaSalas = async (req, res) => {
   }
 };
 
+const mostrarSalas = (req, res) => {
+  res.render('salas', {
+    titulo: 'Salas Existentes',
+    mensagem: 'Esta é a página de visualização das Salas!'
+  });
+};
+
 module.exports = {
     getAllSala,
     getSalaById,
@@ -80,4 +85,5 @@ module.exports = {
     updateSala,
     deleteSala,
     listaSalas,
+    mostrarSalas
 };

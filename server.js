@@ -1,17 +1,27 @@
-require('dotenv').config();
 const express = require('express');
 const app = express();
-const db = require('./config/database');
 const path = require('path');
+const salas = require('./routes/salas');
+const db = require('./config/database');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/', salas);
+
+app.get('/', (req, res) => {
+  res.render('index', {
+    titulo: 'Página Inicial',
+    mensagem: 'Bem-vindo ao sistema de reservas!'
+  });
+}); 
+
 db.connect()
   .then(() => {
     console.log('Conectado ao banco de dados PostgreSQL');
-
-    app.use(express.json());
 
     const userRoutes = require('./routes/userRoutes');
     app.use('/users', userRoutes);

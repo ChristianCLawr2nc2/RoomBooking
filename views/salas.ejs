@@ -1,7 +1,5 @@
-<h2>salas</h2>
-<p>Lista de Salas:</p>
-
-<table border="1" id="salasTable">
+<h2>Lista de Salas</h2>
+<table id="salasTable" border="1">
   <thead>
     <tr>
       <th>ID</th>
@@ -10,44 +8,31 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td colspan="3">Carregando salas...</td>
-    </tr>
+    <tr><td colspan="3">Carregando...</td></tr>
   </tbody>
 </table>
 
 <script>
-  async function fetchSalas() {
-    try {
-      const response = await fetch('/salas');
-      if (!response.ok) {
-        throw new Error('Erro ao buscar salas');
-      }
-      const salas = await response.json();
+  async function carregarSalas() {
+    const res = await fetch('/api/salas');
+    const salas = await res.json();
+    const tbody = document.querySelector('#salasTable tbody');
+    tbody.innerHTML = '';
 
-      const tableBody = document.querySelector('#salasTable tbody');
-      tableBody.innerHTML = ''; // Limpa o conteúdo anterior
-
-      if (salas.length > 0) {
-        salas.forEach(sala => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${sala.sala_id}</td>
-            <td>${sala.numero}</td>
-            <td>${sala.andar}</td>
-          `;
-          tableBody.appendChild(row);
-        });
-      } else {
-        tableBody.innerHTML = '<tr><td colspan="3">Nenhuma sala encontrada.</td></tr>';
-      }
-    } catch (error) {
-      console.error(error);
-      const tableBody = document.querySelector('#salasTable tbody');
-      tableBody.innerHTML = '<tr><td colspan="3">Erro ao carregar salas.</td></tr>';
+    if (salas.length > 0) {
+      salas.forEach(sala => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${sala.sala_id}</td>
+          <td>${sala.numero}</td>
+          <td>${sala.andar}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    } else {
+      tbody.innerHTML = '<tr><td colspan="3">Nenhuma sala encontrada.</td></tr>';
     }
   }
 
-  // Chama a função ao carregar a página
-  fetchSalas();
+  carregarSalas();
 </script>

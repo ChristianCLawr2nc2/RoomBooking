@@ -1,67 +1,40 @@
-// services/userService.js
-
 const db = require('../config/database');
 
-// Função para obter todas as salas
-const getAllSala = async () => {
-  try {
-    const result = await db.query('SELECT * FROM sala ORDER BY sala_id ASC');
-    return result.rows;
-  } catch (error) {
-    throw new Error('Erro ao obter as salas: ' + error.message);
-  }
-};
-
-// Função para obter um usuário por ID
-const getSalaById = async (sala_id) => {
-  try {
-    const result = await db.query('SELECT * FROM sala WHERE sala_id = $1', [sala_id]);
-    return result.rows[0];
-  } catch (error) {
-    throw new Error('Erro ao obter salas: ' + error.message);
-  }
-};
-
-// Função para criar um novo usuário
-const createSala = async (numero, andar) => {
-  try {
-    const result = await db.query(
-      'INSERT INTO sala (numero, andar) VALUES ($1, $2) RETURNING *',
-      [numero, andar]
-    );
-    return result.rows[0];
-  } catch (error) {
-    throw new Error('Erro ao criar salas: ' + error.message);
-  }
-};
-
-// Função para atualizar uma sala por ID
-const updateSala = async (sala_id, numero, andar) => {
-  try {
-    const result = await db.query(
-      'UPDATE sala SET numero = $1, andar = $2 WHERE sala_id = $3 RETURNING *',
-      [sala_id, numero, andar]
-    );
-    return result.rows[0];
-  } catch (error) {
-    throw new Error('Erro ao atualizar usuário: ' + error.message);
-  }
-};
-
-// Função para deletar um usuário por ID
-const deleteSala = async (sala_id) => {
-  try {
-    const result = await db.query('DELETE FROM sala WHERE sala_id = $1 RETURNING *', [sala_id]);
-    return result.rows[0];
-  } catch (error) {
-    throw new Error('Erro ao deletar salas: ' + error.message);
-  }
-};
-
 module.exports = {
-  getAllSala,
-  getSalaById,
-  createSala,
-  updateSala,
-  deleteSala
+  async createSala(numero, andar, reserva_id = null) {
+    const query = 'INSERT INTO salas (numero, andar, reserva_id) VALUES ($1, $2, $3) RETURNING *';
+    const values = [numero, andar, reserva_id];
+    const result = await db.query(query, values);
+    return result.rows[0];
+  },
+
+  async getAllSala() {
+    const query = `
+      SELECT salas.sala_id, salas.numero, salas.andar, reservas.reserva_id
+      FROM salas
+      LEFT JOIN reservas ON salas.reserva_id = reservas.reserva_id
+      ORDER BY salas.sala_id ASC
+    `;
+    const result = await db.query(query);
+    return result.rows;
+  },
+
+  async getSalaByReserva(reserva_id) {
+    const query = 'SELECT sala_id, numero, andar FROM salas WHERE reserva_id = $1 ORDER BY sala_id ASC';
+    const result = await db.query(query, [reserva_id]);
+    return result.rows;
+  },
+
+  async updateSala(sala_id, numero, andar) {
+    const query = 'UPDATE salas SET numero = $1, andar = $2 WHERE sala_id = $3 RETURNING *';
+    const values = [numero, andar, sala_id];
+    const result = await db.query(query, values);
+    return result.rows[0];
+  },
+
+  async deleteSala(sala_id) {
+    const query = 'DELETE FROM salas WHERE sala_id = $1 RETURNING *';
+    const result = await db.query(query, [sala_id]);
+    return result.rows[0];
+  }
 };

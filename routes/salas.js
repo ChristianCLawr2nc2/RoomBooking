@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/salaController');
+const salaController = require('../controllers/salaController');
 
-router.get('/', controller.getAllSala);
-router.get('/:sala_id', controller.getSalaById);
-router.post('/', controller.createSala);
-router.put('/:sala_id', controller.updateSala);
-router.delete('/:sala_id', controller.deleteSala);
+// Página web com EJS
+router.get('/salas', salaController.mostrarSalas);
+
+// API REST
+router.get('/api/salas', salaController.getAllSala);
+router.get('/api/salas/:sala_id', salaController.getSalaById);
+router.post('/api/salas', salaController.createSala);
+router.put('/api/salas/:sala_id', salaController.updateSala);
+router.delete('/api/salas/:sala_id', salaController.deleteSala);
 
 module.exports = router;
