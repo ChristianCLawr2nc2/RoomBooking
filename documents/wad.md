@@ -5,7 +5,7 @@
 
 ## Room Booking - Web Project
 
-![Logo do Projeto](https://github.com/ChristianCLawr2nc2/Projeto-Individual---M2/blob/main/document/assets/Logo/logo.png)
+![Logo do Projeto](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Logo/logo.png)
 
 #### Autor do projeto
 - <a href="http://www.linkedin.com/in/christian-de-carvalho-lawrence">Christian De Carvalho Lawrence</a>
@@ -34,7 +34,7 @@ Este projeto é uma forma de aplicar conhecimentos de front-end, back-end e aind
 
 *Posicione aqui sua(s) Persona(s) em forma de texto markdown com imagens, ou como imagem de template preenchido. Atualize esta seção ao longo do módulo se necessário.*
 
-![Persona - Amanda Costa](https://github.com/ChristianCLawr2nc2/Projeto-Individual---M2/blob/main/document/assets/persona/persona-pi.png)
+![Persona - Amanda Costa](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/persona/persona-pi.png)
 
 
 ### 2.2. User Stories (Semana 01)
@@ -62,77 +62,195 @@ Este projeto é uma forma de aplicar conhecimentos de front-end, back-end e aind
 
 *Posicione aqui os diagramas de modelos relacionais do seu banco de dados, apresentando todos os esquemas de tabelas e suas relações. Utilize texto para complementar suas explicações, se necessário.*
 
-![Diagrama de tabelas do banco de dados](https://github.com/ChristianCLawr2nc2/Projeto-Individual---M2/blob/main/document/assets/modelo-banco/modelo-banco.png)
+![Diagrama de tabelas do banco de dados](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/modelo-banco/modelo-banco.png)
 
 **Modelo Físico do Banco de Dados**
 ````sql
-Table usuario {
-  id int [pk, increment]
-  nome varchar(100) [not null]
-  email varchar(100) [not null]
-  tipo enum('adiministrador', 'coordenação', 'aluno') [not null]
-}
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'tipo_usuario') THEN
+    CREATE TYPE tipo_usuario AS ENUM ('admin', 'usuario');
+  END IF;
+END $$;
 
-Table sala {
-  sala_id int [pk, increment]
-  numero varchar(50) [not null, unique]
-  capacidade varchar(10) [not null]
-  andar number [not null]
-  disponivel boolean [default: true]
-}
+CREATE TABLE IF NOT EXISTS usuario (
+  id SERIAL PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  tipo tipo_usuario NOT NULL
+);
 
-Table reserva {
-  reserva_id int [pk, increment]
-  usuario_id int [not null]
-  sala_id int [not null]
-  status enum('pendente','reservado', 'cancelado') [default: 'pendente']
-  dia_uso date [not null]
-  data_solicitacao timestamp [default: `now()`]
-  tempo time [not null]
-}
+CREATE UNIQUE INDEX IF NOT EXISTS idx_usuario_email ON usuario(email);
 
-table dia {
-  segunda_feira day
-  terça_feira day
-  quarta_feira day
-  quinta_feira day
-  sexta_feira day
-}
+CREATE TABLE IF NOT EXISTS sala (
+  sala_id SERIAL PRIMARY KEY,
+  numero TEXT NOT NULL UNIQUE,
+  andar TEXT NOT NULL,
+  disponivel BOOLEAN DEFAULT TRUE
+);
 
-Ref: reserva.usuario_id > usuario.id
-Ref: reserva.sala_id > sala.sala_id
-Ref: dia.segunda_feira > reserva.dia_uso
-Ref: dia.terça_feira > reserva.dia_uso
-Ref: dia.quarta_feira > reserva.dia_uso
-Ref: dia.quinta_feira > reserva.dia_uso
-Ref: dia.sexta_feira > reserva.dia_uso
+CREATE TABLE IF NOT EXISTS reserva (
+  reserva_id SERIAL PRIMARY KEY,
+  usuario_id INTEGER NOT NULL,
+  sala_id INTEGER NOT NULL,
+  dia DATE NOT NULL,
+  data_solicitacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  tempo INTERVAL NOT NULL,
+  FOREIGN KEY (sala_id) REFERENCES sala(sala_id),
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+  UNIQUE(sala_id, dia, tempo)
+);
+
+INSERT INTO usuario (nome, email, tipo) VALUES
+('Alice Silva', 'alice@empresa.com', 'admin'),
+('Bruno Lima', 'bruno@empresa.com', 'usuario'),
+('Carla Souza', 'carla@empresa.com', 'usuario');
+
+INSERT INTO sala (numero, andar, disponivel) VALUES
+('R01', '1º andar', TRUE),
+('R02', '1º andar', TRUE),
+('R03', '2º andar', TRUE),
+('R04', '2º andar', TRUE);
+
+INSERT INTO reserva (usuario_id, sala_id, dia, tempo) VALUES
+(1, 1, '2025-05-25', '2 hours'),
+(2, 2, '2025-05-25', '1 hour'),
+(3, 4, '2025-05-26', '2 hours');
+
+SELECT
+  u.nome AS nome_usuario,
+  s.numero AS numero_sala,
+  s.andar,
+  r.dia,
+  r.tempo,
+  r.data_solicitacao
+FROM reserva r
+JOIN usuario u ON r.usuario_id = u.id
+JOIN sala s ON r.sala_id = s.sala_id
+ORDER BY r.dia, r.tempo;
 ````
 ---
 ### 3.1.1 BD e Models (Semana 5)
-*Descreva aqui os Models implementados no sistema web*
+
+---
+
+## 🧠 Models no Sistema ##
+1. Sala (Model de Sala)
+Responsável por representar uma sala física do sistema. Este model deve conter os atributos e métodos necessários para criar, buscar, atualizar e excluir salas no banco de dados.
+
+Campos comuns esperados:
+
+sala_id (identificador único da sala)
+
+nome (nome da sala)
+
+capacidade (número máximo de pessoas)
+
+localizacao (informações de onde fica a sala)
+
+---
+Funções típicas:
+
+getAllSala(): Retorna todas as salas cadastradas
+
+getSalaById(sala_id): Busca uma sala específica por ID
+
+createSala(dados): Cria uma nova sala no banco
+
+updateSala(sala_id, dados): Atualiza os dados de uma sala
+
+deleteSala(sala_id): Remove a sala do banco
+
+2. Reserva (Model de Reserva)
+Model que representa a reserva de uma sala. Ele está associado a uma sala e possivelmente a um usuário (se houver controle de usuários).
+
+Campos comuns esperados:
+
+reserva_id
+
+usuario_id (cahve estrangeira para usuario)
+
+sala_id (chave estrangeira para Sala)
+
+data (data da reserva)
+
+duracao (duração da reserva)
+
+---
+Funções típicas:
+
+getAllReservas()
+
+getReservaById(reserva_id)
+
+createReserva(dados)
+
+updateReserva(reserva_id, dados)
+
+deleteReserva(reserva_id)
+
+3. User (Model de Usuário)
+Model utilizado para representar usuários do sistema, caso haja controle de acesso ou cadastro.
+
+Campos comuns esperados:
+
+id
+
+nome
+
+email
+
+senha (com hash)
+
+tipo (admin, usuário comum)
+
+---
+Funções típicas:
+
+getAllUsers()
+
+getUserById(id)
+
+createUser(dados)
+
+updateUser(id, dados)
+
+deleteUser(id)
 
 ### 3.2. Arquitetura (Semana 5)
 
-*Posicione aqui o diagrama de arquitetura da sua solução de aplicação web. Atualize sempre que necessário.*
+---
 
-**Instruções para criação do diagrama de arquitetura**  
-- **Model**: A camada que lida com a lógica de negócios e interage com o banco de dados.
-- **View**: A camada responsável pela interface de usuário.
-- **Controller**: A camada que recebe as requisições, processa as ações e atualiza o modelo e a visualização.
-  
-*Adicione as setas e explicações sobre como os dados fluem entre o Model, Controller e View.*
+![Diagrama de Arquitetura](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/diagramas/diagrama-de-arquitetura.png)
+
+---
+Parágrafos explicativos sobre os:
+**Models**
+**Views**
+**Controllers**
+
+## 🧠 Model ##
+A camada Model trata dos dados e da lógica de negócios, além de lidar também com o banco de dados. Aqui, ele cria as memdescrições estruturais-data e métodos que fazem ações desses dados como busca, criação, atualização, remoção, por exemplo. Os arquivos dessa camada estão localizados em models/ e herdam as configurações do arquivo(s) de configuração em config/ e do arquivo .env já mencionado: no arquivo(s) de configuração estão inseridas informações como configurações para acesso ao banco de dados em si dentro (PostgreSQL, por exemplo).
+
+## 🎮 Controller  ##
+A Controller camada é o cérebro que conecta a View com o Model. Assim, quando o usuário faz uma requisição  ao sistema (por exemplo, navegar em uma rota /salas ou um formulário de reserva), esta requisição será enviada para a Controller via rotas configurada em routes/. O controller lê a ação, consulta os dados no Model, e escolhe a resposta a retornar; elas podem renderizar páginas (no caso da view) ou retornar JSON  para API’s REST neste caso. Arquivos desta camada estão salvas na pasta controllers …. 
+
+## 👁️ View  ##
+Essa é a camada View que concretiza a visualização da interface para o usuário. Na sua infra, ela está no diretório views/ usando a engine de templates EJS. Durante a ativação, quando o controller quer renderizar, passa os dados do model  “Model”   para os arquivos .ejs da pasta view que por sua vez exibe ao usuário do sistema, formatado para HTML. A pasta views/ possui uma organização interna em várias subpastas como pages (cadastros com todas as suas paginas), layout (estrutura base das páginas), partials  (bloco reutilizável), components/p/  css e usa arquivos estáticos public/.
+
+---
 
 ### 3.3. Wireframes (Semana 03)
 
-![Wireframe Completo](https://github.com/ChristianCLawr2nc2/Projeto-Individual---M2/blob/main/document/assets/Wireframe/wireframe.png)
+![Wireframe Completo](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Wireframe/wireframe.png)
 
-![Tela de Login](https://github.com/ChristianCLawr2nc2/Projeto-Individual---M2/blob/main/document/assets/Wireframe/1.png)
+![Tela de Login](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Wireframe/1.png)
 
-![Tela de Principal](https://github.com/ChristianCLawr2nc2/Projeto-Individual---M2/blob/main/document/assets/Wireframe/2.png)
+![Tela de Principal](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Wireframe/2.png)
 
-![Tela de Reserva](https://github.com/ChristianCLawr2nc2/Projeto-Individual---M2/blob/main/document/assets/Wireframe/3.png)
+![Tela de Reserva](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Wireframe/3.png)
 
-![Tela de Visualização das Reservas](https://github.com/ChristianCLawr2nc2/Projeto-Individual---M2/blob/main/document/assets/Wireframe/4.png)
+![Tela de Visualização das Reservas](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Wireframe/4.png)
 
 ### 3.4. Guia de estilos (Semana 05)
 
@@ -141,11 +259,83 @@ Ref: dia.sexta_feira > reserva.dia_uso
 
 ### 3.5. Protótipo de alta fidelidade (Semana 05)
 
-*Posicione aqui algumas imagens demonstrativas de seu protótipo de alta fidelidade e o link para acesso ao protótipo completo (mantenha o link sempre público para visualização).*
+![Tela de Login](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/prototipo/login.png)
+
+![Tela Home do site](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/prototipo/home.png)
+
+![Tela para reservar as salas](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/prototipo/reservando.png)
+
+![Tela das reservas do usuário](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/prototipo/reservas.png)
+
+[Link de Protótipo no Figma](https://www.figma.com/design/ui33OggzNK9Z0dYD8Ws81B/PAF?node-id=0-1&p=f&t=bCsRVbXvzJZOUZ15-0)
 
 ### 3.6. WebAPI e endpoints (Semana 05)
 
-*Utilize um link para outra página de documentação contendo a descrição completa de cada endpoint. Ou descreva aqui cada endpoint criado para seu sistema.*  
+# 📚 Explicação dos Endpoints do Sistema de Gerenciamento de Salas
+
+---
+
+## 📄 Páginas Renderizadas (EJS)
+
+| Método | Rota        | Descrição                                                | Origem                          |
+|--------|-------------|----------------------------------------------------------|---------------------------------|
+| GET    | `/`         | Página inicial com lista de salas                        | `router.get('/')`, `app.get('/')` |
+| GET    | `/about`    | Página sobre, com conteúdo de reservas                   | `router.get('/about')`          |
+| GET    | `/reserva`  | Página de reserva                                        | `router.get('/reserva')`        |
+| GET    | `/salas`    | Página de visualização de salas                          | `router.get('/salas')`, `salas.index` |
+| GET    | `/salas`    | Visualização de salas usando `mostrarSalas`             | `salaController.mostrarSalas`   |
+| GET    | `/reservas` | Página de reservas                                       | `app.get('/reservas')`          |
+
+---
+
+## 🔁 Ações via Formulário
+
+| Método | Rota                    | Descrição                            | Controlador         |
+|--------|-------------------------|--------------------------------------|---------------------|
+| POST   | `/`                     | Cria novo registro                   | `controller.create` |
+| POST   | `/edit/:reserva_id`     | Atualiza reserva pelo ID             | `controller.update` |
+| POST   | `/delete/:reserva_id`   | Remove reserva pelo ID               | `controller.delete` |
+
+---
+
+## 🌐 API REST — Salas
+
+| Método | Rota                    | Descrição                            | Controlador                |
+|--------|-------------------------|--------------------------------------|----------------------------|
+| GET    | `/api/salas`            | Lista todas as salas                 | `salaController.getAllSala` |
+| GET    | `/api/salas/:sala_id`   | Busca uma sala específica por ID     | `salaController.getSalaById` |
+| POST   | `/api/salas`            | Cria uma nova sala                   | `salaController.createSala` |
+| PUT    | `/api/salas/:sala_id`   | Atualiza uma sala específica         | `salaController.updateSala` |
+| DELETE | `/api/salas/:sala_id`   | Remove uma sala específica           | `salaController.deleteSala` |
+
+---
+
+## 👥 API REST — Usuários
+
+| Método | Rota         | Descrição                        | Controlador                   |
+|--------|--------------|----------------------------------|-------------------------------|
+| GET    | `/users`     | Lista todos os usuários          | `userController.getAllUsers`  |
+| GET    | `/users/:id` | Retorna usuário específico por ID| `userController.getUserById`  |
+| POST   | `/users`     | Cria um novo usuário             | `userController.createUser`   |
+| PUT    | `/users/:id` | Atualiza um usuário              | `userController.updateUser`   |
+| DELETE | `/users/:id` | Remove um usuário                | `userController.deleteUser`   |
+
+---
+
+## ⚙️ Configuração do Servidor (`server.js`)
+
+- **Registro de rotas de usuários:**  
+  `app.use('/users', userRoutes)`
+
+- **Registro de rotas do front-end:**  
+  `app.use('/', frontendRoutes)`
+
+- **Middleware para rota não encontrada:**  
+  ```js
+  app.use((req, res, next) => {
+    res.status(404).send('Página não encontrada');
+  });
+
 
 ### 3.7 Interface e Navegação (Semana 07)
 

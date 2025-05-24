@@ -22,9 +22,33 @@ Este projeto é uma forma de aplicar conhecimentos de front-end, back-end e aind
 
 ## 📁 Estrutura de pastas
 ```plaintext
-├── M2/    # Contem a maior parte dos arquivos do projeto.
-    ├── assets/     # Contem as imagens usadas na documentação e desenvolvimento do projeto.
-    ├── WAD.md      # Contem a documantação do projeto.
+ROOMBOOKING/
+├── assets/
+├── config/
+├── controllers/
+├── documents/
+│ └── assets/
+├── models/
+├── node_modules/
+├── public/
+├── routes/
+├── scripts/
+├── tests/
+├── views/
+│ ├── components/
+│ ├── css/
+│ ├── layout/
+│ ├── pages/
+│ ├── partials/
+├── .env
+├── .gitignore
+├── app.js
+├── jest.config.js
+├── package-lock.json
+├── package.json
+├── README.md
+├── rest.http
+└── server.js
 ```
 ---
 
@@ -41,7 +65,6 @@ Este projeto é uma forma de aplicar conhecimentos de front-end, back-end e aind
 - ✅ Visualização de salas disponíveis
 - ✅ Reserva de salas
 - ✅ Visualização de reservas
-- ✅ Edição e cancelamento de reservas
 
 ---
 
