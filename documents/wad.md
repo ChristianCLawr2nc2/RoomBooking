@@ -254,7 +254,10 @@ Essa é a camada View que concretiza a visualização da interface para o usuár
 
 ### 3.4. Guia de estilos (Semana 05)
 
-*Descreva aqui orientações gerais para o leitor sobre como utilizar os componentes do guia de estilos de sua solução.*
+![Mini guia de estilos](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/estilos/mini-guia-de-estilos.png)
+
+![Guia de Estilos](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/estilos/PAF.png)
+
 
 
 ### 3.5. Protótipo de alta fidelidade (Semana 05)
