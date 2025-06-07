@@ -343,6 +343,49 @@ Essa é a camada View que concretiza a visualização da interface para o usuár
 ### 3.7 Interface e Navegação (Semana 07)
 
 *Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
+1. Tecnologias Utilizadas
+
+HTML5 e CSS3 para a estrutura e estilo das páginas.
+
+JavaScript para interatividade no lado do cliente.
+
+Frameworks ou bibliotecas utilizadas, como Bootstrap para responsividade ou EJS para renderização de templates.
+
+2. Estrutura das Páginas
+
+Layout comum (cabeçalho, menu de navegação).
+
+Formulários de cadastro e edição.
+
+Listagens de dados.
+
+3. Funcionalidades Implementadas
+
+Validação de formulários no lado do cliente.
+
+Feedback visual para ações do usuário (mensagens de sucesso ou erro).
+
+Interações dinâmicas, como modais ou menus expansíveis.
+
+Responsividade para diferentes tamanhos de tela.
+
+4. Integração com o Backend
+
+Uso de EJS para renderizar páginas com dados dinâmicos.
+
+Requisições assíncronas utilizando Fetch API ou Axios (se aplicável).
+
+5. Capturas de Tela
+
+![Tela de Registro](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/capturas/registro.png)
+
+![Tela de Login](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/capturas/login.png)
+
+![Tela de Salas](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/capturas/salas.png)
+
+![Tela de Reserva](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/capturas/nova-reserva.png)
+
+![Tela de Visualização das Reservas](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/capturas/minhas-reservas.png)
 
 ---
 

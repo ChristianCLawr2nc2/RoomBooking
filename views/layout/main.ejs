@@ -1,14 +1,56 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Gestão de Salas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || 'Room Booking - Sistema de Reservas' %></title>
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components/header.css">
+  <% if (locals.pageCSS) { %>
+    <link rel="stylesheet" href="<%= pageCSS %>">
+  <% } %>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/logo.png">
 </head>
 <body>
-  <header><h1>Gestão de Salas</h1></header>
-  <main>
-    <%- include(content) %> <!-- Vai incluir views/salas.ejs -->
+  <!-- Professional Header -->
+  <%- include('../components/header', {
+    currentPage: locals.currentPage || '',
+    user: locals.user || (locals.session && locals.session.user) || null
+  }) %>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <%- body %>
   </main>
-  <footer><p>Rodapé da aplicação</p></footer>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Room Booking</h4>
+          <p>Sistema profissional de reservas de salas</p>
+        </div>
+        <div class="footer-section">
+          <h4>Links Úteis</h4>
+          <ul>
+            <li><a href="/salas">Salas Disponíveis</a></li>
+            <li><a href="/minhas_reservas">Minhas Reservas</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Suporte</h4>
+          <p>Para dúvidas, entre em contato com o administrador</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <%= new Date().getFullYear() %> Room Booking System. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

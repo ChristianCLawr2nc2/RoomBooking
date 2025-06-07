@@ -1,54 +1,229 @@
-<h2>reservas</h2>
-<p>Lista de reservas:</p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reservas/style.css">
+    <title>Minhas Reservas - Room Booking</title>
+</head>
+<body>
+    <header>
+        <div class="titulo">  
+            <div class="logo">
+                <img src="/assets/logo.png" alt="Logo do Room Booking">
+            </div>
 
-<table border="1" id="reservasTable">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>sala</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td colspan="3">Carregando reservas...</td>
-    </tr>
-  </tbody>
-</table>
+            <div class="botao-reservas">
+                <a href="/reservas">Reservas</a>
+            </div>
+            <div class="botao-salas">
+                <a href="/salas">Salas</a>
+            </div>
+            <div class="logout">
+                <a href="/login">Sair</a>
+            </div>
+        </div>
+    </header>
 
-<script>
-  // Função para buscar usuários da API e renderizar na tabela
-  async function fetchReservas() {
-    try {
-      const response = await fetch('/reservas');
-      if (!response.ok) {
-        throw new Error('Erro ao buscar reservas');
-      }
-      const reservas = await response.json();
+    <main>
+        <div class="topo">
+            <h1 class="page-title">Minhas Reservas</h1>
+            <p class="page-subtitle">Aqui você pode visualizar e gerenciar suas reservas</p>
+        </div>
 
-      const tableBody = document.querySelector('#reservasTable tbody');
-      tableBody.innerHTML = ''; // Limpa o conteúdo anterior
+        <div class="error-message" style="display: none;"></div>
 
-      if (reservas.length > 0) {
-        reservas.forEach(reserva => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${reserva.id}</td>
-            <td>${reserva.nome}</td>
-            <td>${reserva.sala}</td>
-          `;
-          tableBody.appendChild(row);
+        <div id="message-container"></div>
+
+        <% if (reservas && reservas.length > 0) { %>
+        <div class="reservations-grid">
+          <% reservas.forEach(reserva => { %>
+            <div class="reservation-card" id="card-<%= reserva.reserva_id || reserva.id %>">
+              <div class="reservation-header">
+                <div class="reservation-info">
+                  <div class="reservation-room">Sala <%= reserva.numero %></div>
+                  <div class="reservation-floor"><%= reserva.andar %></div>
+                </div>
+              </div>
+
+              <div class="reservation-details" id="details-<%= reserva.reserva_id || reserva.id %>">
+                <div class="reservation-date">Data: <%= reserva.dia || new Date(reserva.horario).toLocaleDateString('pt-BR') %></div>
+                <div class="reservation-time">Horário: <%= reserva.horario %></div>
+                <div class="reservation-duration">Duração: <%= reserva.duracao %></div>
+              </div>
+
+              <div class="edit-form" id="edit-form-<%= reserva.reserva_id || reserva.id %>">
+                <div class="form-group">
+                  <label for="edit-horario-<%= reserva.reserva_id || reserva.id %>">Horário:</label>
+                  <input type="time" id="edit-horario-<%= reserva.reserva_id || reserva.id %>" value="<%= reserva.horario %>">
+                </div>
+                <div class="form-group">
+                  <label for="edit-duracao-<%= reserva.reserva_id || reserva.id %>">Duração:</label>
+                  <select id="edit-duracao-<%= reserva.reserva_id || reserva.id %>">
+                    <option value="30 minutos" <%= reserva.duracao === '30 minutos' ? 'selected' : '' %>>30 minutos</option>
+                    <option value="1 hora" <%= reserva.duracao === '1 hora' ? 'selected' : '' %>>1 hora</option>
+                    <option value="2 horas" <%= reserva.duracao === '2 horas' ? 'selected' : '' %>>2 horas</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="reservation-actions" id="actions-<%= reserva.reserva_id || reserva.id %>">
+                <button type="button" class="update-button" onclick="editReserva('<%= reserva.reserva_id || reserva.id %>')">Editar</button>
+                <button type="button" class="delete-button" onclick="showDeleteModal('<%= reserva.reserva_id || reserva.id %>')">Cancelar</button>
+              </div>
+
+              <div class="edit-actions" id="edit-actions-<%= reserva.reserva_id || reserva.id %>">
+                <button type="button" class="save-button" onclick="saveReserva('<%= reserva.reserva_id || reserva.id %>')">Salvar</button>
+                <button type="button" class="cancel-edit-button" onclick="cancelEdit('<%= reserva.reserva_id || reserva.id %>')">Cancelar</button>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+        <% } else { %>
+        <div class="empty-state">
+          <div class="empty-state-title">Nenhuma reserva encontrada</div>
+        </div>
+        <% } %>
+
+        <div class="modal" id="delete-modal">
+            <div class="modal-content">
+                <div class="modal-title">Confirmar Cancelamento</div>
+                <div class="modal-text">Tem certeza que deseja cancelar esta reserva?</div>
+                <div class="modal-actions">
+                    <button class="modal-button confirm" onclick="confirmDelete()">Confirmar</button>
+                    <button class="modal-button cancel" onclick="closeModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let deleteReservaId = null;
+
+        function showMessage(message, type) {
+            const container = document.getElementById('message-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
+            messageDiv.textContent = message;
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        function editReserva(reservaId) {
+            const details = document.getElementById('details-' + reservaId);
+            const editForm = document.getElementById('edit-form-' + reservaId);
+            const actions = document.getElementById('actions-' + reservaId);
+            const editActions = document.getElementById('edit-actions-' + reservaId);
+            
+            details.style.display = 'none';
+            editForm.style.display = 'block';
+            actions.style.display = 'none';
+            editActions.style.display = 'flex';
+        }
+
+        function cancelEdit(reservaId) {
+            const details = document.getElementById('details-' + reservaId);
+            const editForm = document.getElementById('edit-form-' + reservaId);
+            const actions = document.getElementById('actions-' + reservaId);
+            const editActions = document.getElementById('edit-actions-' + reservaId);
+            
+            details.style.display = 'block';
+            editForm.style.display = 'none';
+            actions.style.display = 'flex';
+            editActions.style.display = 'none';
+        }
+
+        function saveReserva(reservaId) {
+            const horario = document.getElementById('edit-horario-' + reservaId).value;
+            const duracao = document.getElementById('edit-duracao-' + reservaId).value;
+            
+            if (!horario) {
+                showMessage('Por favor, preencha o horário.', 'error');
+                return;
+            }
+            
+            fetch('/update_reserva/' + reservaId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    horario: horario,
+                    duracao: duracao
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('details-' + reservaId).innerHTML = 
+                        '<div class="reservation-date">Data: ' + new Date().toLocaleDateString('pt-BR') + '</div>' +
+                        '<div class="reservation-time">Horário: ' + horario + '</div>' +
+                        '<div class="reservation-duration">Duração: ' + duracao + '</div>';
+                    
+                    showMessage('Reserva atualizada com sucesso!');
+                    cancelEdit(reservaId);
+                } else {
+                    showMessage(data.message || 'Erro ao atualizar reserva.', 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('Erro ao atualizar reserva.', 'error');
+                console.error('Erro:', error);
+            });
+        }
+
+        function showDeleteModal(reservaId) {
+            deleteReservaId = reservaId;
+            document.getElementById('delete-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('delete-modal').style.display = 'none';
+            deleteReservaId = null;
+        }
+
+        function confirmDelete() {
+            if (deleteReservaId) {
+                fetch('/delete_reserva/' + deleteReservaId, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('card-' + deleteReservaId).remove();
+                        showMessage('Reserva cancelada com sucesso!');
+                        
+                        const remainingCards = document.querySelectorAll('.reservation-card');
+                        if (remainingCards.length === 0) {
+                            const grid = document.querySelector('.reservations-grid');
+                            if (grid) {
+                                grid.style.display = 'none';
+                            }
+                            const emptyState = document.querySelector('.empty-state');
+                            if (emptyState) {
+                                emptyState.style.display = 'block';
+                            }
+                        }
+                    } else {
+                        showMessage(data.message || 'Erro ao cancelar reserva.', 'error');
+                    }
+                })
+                .catch(error => {
+                    showMessage('Erro ao cancelar reserva.', 'error');
+                    console.error('Erro:', error);
+                });
+            }
+            closeModal();
+        }
+
+        document.getElementById('delete-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
         });
-      } else {
-        tableBody.innerHTML = '<tr><td colspan="3">Nenhuma reserva encontrada.</td></tr>';
-      }
-    } catch (error) {
-      console.error(error);
-      const tableBody = document.querySelector('#reservasTable tbody');
-      tableBody.innerHTML = '<tr><td colspan="3">Erro ao carregar reservas.</td></tr>';
-    }
-  }
-
-  // Chama a função ao carregar a página
-  fetchReservas();
-</script>
+    </script>
+</body>
+</html>

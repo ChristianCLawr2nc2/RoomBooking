@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/nova_reserva/style.css">
+  <title>Nova Reserva - Room Booking</title>
+</head>
+<body>
+  <header>
+    <img src="/assets/logo.png" alt="Logo do Room Booking">
+  </header>
+
+  <main>
+    <div class="main-section">
+      <div class="reservation-card">
+        <h2 class="reservation-title">Nova Reserva</h2>
+
+        <% if (error) { %>
+          <p class="error-message"><%= error %></p>
+        <% } %>
+
+        <form method="POST" action="/nova_reserva" class="reservation-form">
+          <!-- Sala -->
+          <div>
+            <label for="sala_id" class="input-label">Sala *</label>
+            <select id="sala_id" name="sala_id" required>
+              <option value="">Selecione uma sala</option>
+              <% if (locals.salas && salas.length > 0) { %>
+                <% salas.forEach(sala => { %>
+                  <option value="<%= sala.sala_id %>" data-andar="<%= sala.andar %>">
+                    Sala <%= sala.numero %>
+                  </option>
+                <% }) %>
+              <% } else { %>
+                <option value="1" data-andar="1º andar">Sala R01</option>
+                <option value="2" data-andar="1º andar">Sala R02</option>
+                <option value="3" data-andar="1º andar">Sala R03</option>
+                <option value="4" data-andar="2º andar">Sala R04</option>
+              <% } %>
+            </select>
+          </div>
+
+          <!-- Andar (auto preenchido) -->
+          <div>
+            <label for="andar" class="input-label">Andar</label>
+            <input type="text" id="andar" class="input-field" disabled>
+          </div>
+
+          <!-- Data da Reserva -->
+          <div>
+            <label for="dia" class="input-label">Data da Reserva *</label>
+            <input type="date" id="dia" name="dia" class="input-field" required>
+          </div>
+
+          <!-- Horário -->
+          <div>
+            <label for="horario" class="input-label">Horário *</label>
+            <input type="time" id="horario" name="horario" class="input-field" required>
+          </div>
+
+          <!-- Duração -->
+          <div>
+            <label for="duracao" class="input-label">Duração *</label>
+            <select id="duracao" name="duracao" required>
+              <option value="">Selecione a duração</option>
+              <option value="30">30 minutos</option>
+              <option value="60">1 hora</option>
+              <option value="90">1 hora e 30 minutos</option>
+              <option value="120">2 horas</option>
+            </select>
+          </div>
+
+          <!-- Botão -->
+          <button type="submit" class="reservation-button">Confirmar Reserva</button>
+        </form>
+
+        <div class="voltar-salas">
+          <a href="/salas">Voltar para Salas</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const salaSelect = document.getElementById('sala_id');
+    const andarInput = document.getElementById('andar');
+    const dataInput = document.getElementById('dia');
+
+    // Auto preencher andar baseado na sala selecionada
+    salaSelect.addEventListener('change', () => {
+      const selectedOption = salaSelect.options[salaSelect.selectedIndex];
+      const andar = selectedOption.dataset.andar || '';
+      andarInput.value = andar;
+    });
+
+    // Definir data mínima como hoje
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
+    dataInput.setAttribute('min', todayString);
+    
+    // Opcional: definir data padrão como hoje
+    dataInput.value = todayString;
+  </script>
+</body>
+</html>

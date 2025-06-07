@@ -1,0 +1,428 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #4A5A63 0%, #3A4B52 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #333;
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 20px 0;
+  flex-shrink: 0;
+}
+
+header img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  transition: transform 0.3s ease;
+}
+
+header img:hover {
+  transform: scale(1.05);
+}
+
+/* Main container */
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: calc(100vh - 190px);
+}
+
+/* Main section */
+.main-section {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Card de registro */
+.register-card {
+  width: 100%;
+  padding: 40px 35px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20px;
+  box-shadow: 
+    0 20px 40px rgba(0,0,0,0.15),
+    0 10px 20px rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.register-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 25px 50px rgba(0,0,0,0.2),
+    0 12px 24px rgba(0,0,0,0.15);
+}
+
+/* Título do registro */
+.register-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2D3B44;
+  position: relative;
+}
+
+.register-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #2D3B44, #4A5A63);
+  border-radius: 2px;
+}
+
+/* Form styling */
+.register-form {
+  width: 100%;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #2D3B44;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-label:first-child {
+  margin-top: 0;
+}
+
+.input-field {
+  width: 100%;
+  padding: 15px 20px;
+  border: 2px solid #e1e1e1;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #fafafa;
+  outline: none;
+  margin-bottom: 5px;
+}
+
+.input-field:focus {
+  border-color: #2D3B44;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(45, 59, 68, 0.1);
+  transform: translateY(-2px);
+}
+
+.input-field:hover {
+  border-color: #4A5A63;
+  background: white;
+}
+
+.input-field:valid:not(:placeholder-shown) {
+  border-color: #27ae60;
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+.input-field:invalid:not(:placeholder-shown) {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+/* Botão de registro */
+.register-button {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #2D3B44 0%, #4A5A63 100%);
+  border: none;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.register-button:hover::before {
+  left: 100%;
+}
+
+.register-button:hover {
+  background: linear-gradient(135deg, #1A2329 0%, #3A4B52 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(45, 59, 68, 0.3);
+}
+
+.register-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(45, 59, 68, 0.2);
+}
+
+/* Mensagem de erro */
+.error-message {
+  color: #e74c3c;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: 8px;
+  font-weight: 500;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Seção voltar login */
+.voltar-login {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e1e1e1;
+}
+
+.voltar-login a {
+  color: #2D3B44;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.voltar-login a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #2D3B44;
+  transition: width 0.3s ease;
+}
+
+.voltar-login a:hover::after {
+  width: 100%;
+}
+
+.voltar-login a:hover {
+  color: #4A5A63;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  header {
+    padding: 15px 0;
+  }
+  
+  header img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  main {
+    min-height: calc(100vh - 150px);
+    padding: 15px;
+  }
+  
+  .register-card {
+    padding: 30px 25px;
+  }
+  
+  .register-title {
+    font-size: 1.8rem;
+  }
+  
+  .register-title::after {
+    width: 70px;
+  }
+  
+  .input-field {
+    padding: 12px 15px;
+    font-size: 0.95rem;
+  }
+  
+  .input-label {
+    font-size: 0.85rem;
+    margin-top: 12px;
+  }
+  
+  .register-button {
+    padding: 14px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header img {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .register-card {
+    padding: 25px 20px;
+    border-radius: 15px;
+  }
+  
+  .register-title {
+    font-size: 1.6rem;
+  }
+  
+  .register-title::after {
+    width: 60px;
+  }
+  
+  .input-field {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .input-label {
+    font-size: 0.8rem;
+    margin-top: 10px;
+  }
+  
+  .register-button {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+  
+  .voltar-login a {
+    font-size: 0.9rem;
+  }
+}
+
+/* Melhorias de acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles para acessibilidade */
+.register-button:focus,
+.voltar-login a:focus,
+.input-field:focus {
+  outline: 3px solid rgba(45, 59, 68, 0.5);
+  outline-offset: 2px;
+}
+
+/* Animação de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.register-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+header img {
+  animation: fadeInUp 0.6s ease-out 0.2s backwards;
+}
+
+/* Efeito de loading no botão */
+.register-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.register-button:disabled:hover {
+  background: #ccc;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Indicadores visuais para campos obrigatórios */
+.input-label::after {
+  content: ' *';
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* Melhor espaçamento entre elementos */
+.input-group > .input-field:last-child {
+  margin-bottom: 0;
+}
+
+/* Hover effect para todo o card */
+@media (hover: hover) {
+  .register-card:hover {
+    transform: translateY(-5px);
+  }
+}
+
+/* Garantir que o layout funcione em telas muito pequenas */
+@media (max-width: 320px) {
+  .register-card {
+    padding: 20px 15px;
+  }
+  
+  .register-title {
+    font-size: 1.4rem;
+  }
+  
+  .input-field {
+    padding: 10px 12px;
+  }
+  
+  .register-button {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+header img {
+    width: 300px;
+    height: 300px;
+}

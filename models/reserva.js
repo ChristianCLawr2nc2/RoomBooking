@@ -1,28 +1,80 @@
-const db = require('../config/database');
+const API_BASE_URL = 'https://api.example.com/reserva';
 
-module.exports = {
+export const ReservaModel = {
   async findAll() {
-    const result = await db.query('SELECT * FROM reserva ORDER BY reserva_id ASC');
-    return result.rows;
+    try {
+      const response = await fetch(API_BASE_URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data; // Assuming API returns an array of reservations
+    } catch (error) {
+      console.error('Error fetching reservations:', error);
+      throw error;
+    }
   },
 
   async create(numero, andar) {
-    const result = await db.query(
-      'INSERT INTO reserva (numero, andar) VALUES ($1, $2) RETURNING *',
-      [numero, andar]
-    );
-    return result.rows[0];
+    try {
+      const response = await fetch(API_BASE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ numero, andar }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data; // Assuming API returns the created reservation
+    } catch (error) {
+      console.error('Error creating reservation:', error);
+      throw error;
+    }
   },
 
   async update(reserva_id, numero, andar) {
-    const result = await db.query(
-      'UPDATE reserva SET numero = $1, andar = $2 WHERE reseva_id = $3 RETURNING *',
-      [numero, andar, reserva_id]
-    );
-    return result.rows[0];
+    try {
+      const response = await fetch(`${API_BASE_URL}/${reserva_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ numero, andar }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data; // Assuming API returns the updated reservation
+    } catch (error) {
+      console.error('Error updating reservation:', error);
+      throw error;
+    }
   },
 
   async delete(reserva_id) {
-    await db.query('DELETE FROM reserva WHERE reserva_id = $1', [reserva_id]);
-  }
+    try {
+      const response = await fetch(`${API_BASE_URL}/${reserva_id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return true; // Return true to indicate successful deletion
+    } catch (error) {
+      console.error('Error deleting reservation:', error);
+      throw error;
+    }
+  },
 };

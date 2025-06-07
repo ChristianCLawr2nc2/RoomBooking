@@ -1,43 +1,80 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const salasRoutes = require('./routes/salas');
-
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const multer = require('multer');
 require('dotenv').config();
+
+const db = require('./config/database');
+const salasRoutes = require('./routes/salas');
+const registroRoutes = require('./routes/registro');
+const loginRoutes = require('./routes/login');
+const novaReservaRoutes = require('./routes/novaReserva');
+const reservasRoutes = require('./routes/reservas');
+const authController = require('./controllers/authController');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(multer().none());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
-
-app.use('/index', salasRoutes);
+app.use('/login', loginRoutes);
+app.use('/registro', registroRoutes);
+app.use('/', salasRoutes);
+app.use('/nova_reserva', novaReservaRoutes);
+app.use('/reservas', reservasRoutes);
 
 app.get('/', (req, res) => {
-  res.render('index', {
-    titulo: 'Página Inicial',
-    mensagem: 'Bem-vindo ao sistema de reservas!'
-  });
-
+  if (req.session.user) {
+    res.redirect('/salas');
+  } else {
+    res.redirect('/login');
+  }
 });
 
+app.get('/logout', authController.logout);
 
-app.get('/salas', (req, res) => {
-  res.render('salas', {
-    titulo: 'Salas Existentes',
-    mensagem: 'Esta é a página de visualização das Salas!'
-  });
+async function startServer() {
+  try {
+    await db.query('SELECT NOW()');
+    console.log('Conectado ao banco de dados PostgreSQL');
+
+    app.use((req, res, next) => {
+      res.status(404).render('404', { title: 'Página não encontrada' });
+    });
+
+    app.use((err, req, res, next) => {
+      console.error(`Error occurred at ${req.method} ${req.url}:`, err.stack);
+      res.status(500).render('error', { title: 'Erro', error: 'Erro no servidor' });
+    });
+
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando em http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error('Erro ao conectar ao banco de dados:', err);
+    console.log('Retrying connection in 5 seconds...');
+    setTimeout(startServer, 5000);
+  }
+}
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
 });
 
-app.get('/reservas', (req, res) => {
-  res.render('reservas', {
-    titulo: 'Suas Reservas',
-    mensagem: 'Esta é a página de visualização das Reservas!'
-  });
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
+
+startServer();

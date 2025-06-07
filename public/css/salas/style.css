@@ -1,0 +1,724 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #4A5A63 0%, #2D3B44 100%);
+  min-height: 100vh;
+  color: #212121;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header principal */
+header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 20px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  animation: fadeInDown 0.6s ease-out;
+}
+
+/* Container do título */
+.titulo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+/* Logo */
+.logo img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.05);
+}
+
+/* Botões de navegação */
+.botao-reservas,
+.botao-salas,
+.logout {
+  display: flex;
+  align-items: center;
+}
+
+.botao-reservas a,
+.botao-salas a,
+.logout a {
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #2D3B44 0%, #4A5A63 100%);
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(45, 59, 68, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.botao-reservas a::before,
+.botao-salas a::before,
+.logout a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.botao-reservas a:hover,
+.botao-salas a:hover,
+.logout a:hover {
+  background: linear-gradient(135deg, #000000 0%, #212121 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.botao-reservas a:hover::before,
+.botao-salas a:hover::before,
+.logout a:hover::before {
+  left: 100%;
+}
+
+/* Botão de salas ativo */
+.botao-salas a {
+  background: linear-gradient(135deg, #000000 0%, #212121 100%);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Logout especial */
+.logout a {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+.logout a:hover {
+  background: linear-gradient(135deg, #a71e2a 0%, #8b1a1a 100%);
+}
+
+/* Conteúdo principal */
+main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Seção topo */
+.topo {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.8s ease-out;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+.page-subtitle {
+  font-size: 1.1rem;
+  color: #F1E8DC;
+  font-weight: 300;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Mensagem de erro */
+.error-message {
+  background: rgba(220, 53, 69, 0.15);
+  border: 1px solid rgba(220, 53, 69, 0.4);
+  color: #dc3545;
+  padding: 16px 24px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  animation: shake 0.5s ease-in-out, fadeInUp 0.6s ease-out;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.1);
+}
+
+/* Grid de salas */
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* Card de sala */
+.room-card {
+  background: linear-gradient(145deg, #F9F6F0 0%, #F1E8DC 100%);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 10px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.room-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #2D3B44, #4A5A63);
+  border-radius: 20px 20px 0 0;
+}
+
+.room-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.15),
+    0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Animação escalonada para os cards */
+.room-card:nth-child(1) { animation-delay: 0.1s; }
+.room-card:nth-child(2) { animation-delay: 0.2s; }
+.room-card:nth-child(3) { animation-delay: 0.3s; }
+.room-card:nth-child(4) { animation-delay: 0.4s; }
+.room-card:nth-child(5) { animation-delay: 0.5s; }
+.room-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Cabeçalho do card */
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.room-info {
+  flex: 1;
+}
+
+.room-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.room-floor {
+  font-size: 1rem;
+  color: #2D3B44;
+  font-weight: 500;
+  background: rgba(74, 90, 99, 0.12);
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.room-floor:hover {
+  background: rgba(74, 90, 99, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Detalhes da sala */
+.room-details {
+  margin-bottom: 30px;
+}
+
+.room-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.feature-tag {
+  background: linear-gradient(135deg, #2D3B44, #4A5A63);
+  color: #FFFFFF;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(45, 59, 68, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-tag::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.feature-tag:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(45, 59, 68, 0.3);
+}
+
+.feature-tag:hover::before {
+  left: 100%;
+}
+
+/* Botão de reserva */
+.reserve-button {
+  display: block;
+  width: 100%;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, #2D3B44 0%, #4A5A63 100%);
+  color: #FFFFFF;
+  text-decoration: none;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(45, 59, 68, 0.25);
+  border: none;
+}
+
+.reserve-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.reserve-button:hover {
+  background: linear-gradient(135deg, #000000 0%, #212121 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.reserve-button:hover::before {
+  left: 100%;
+}
+
+.reserve-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(45, 59, 68, 0.25);
+}
+
+/* Estado vazio */
+.empty-state {
+  text-align: center;
+  padding: 80px 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.8s ease-out;
+  margin: 40px 0;
+}
+
+.empty-state-icon {
+  font-size: 5rem;
+  margin-bottom: 30px;
+  opacity: 0.6;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.empty-state-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #FFFFFF;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.empty-state-message {
+  font-size: 1.1rem;
+  color: #F1E8DC;
+  line-height: 1.6;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Animações */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .titulo {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 0 15px;
+  }
+  
+  .logo img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .botao-reservas,
+  .botao-salas,
+  .logout {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .botao-reservas a,
+  .botao-salas a,
+  .logout a {
+    width: 100%;
+    text-align: center;
+    padding: 14px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1rem;
+  }
+  
+  main {
+    padding: 30px 15px;
+  }
+  
+  .topo {
+    padding: 30px 20px;
+  }
+  
+  .rooms-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .room-card {
+    padding: 25px 20px;
+  }
+  
+  .room-name {
+    font-size: 1.6rem;
+  }
+  
+  .room-header {
+    margin-bottom: 20px;
+  }
+  
+  .feature-tag {
+    font-size: 0.8rem;
+    padding: 8px 14px;
+  }
+  
+  .reserve-button {
+    padding: 16px 20px;
+    font-size: 1rem;
+  }
+  
+  .empty-state {
+    padding: 60px 30px;
+    margin: 20px 0;
+  }
+  
+  .empty-state-icon {
+    font-size: 4rem;
+  }
+  
+  .empty-state-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 15px 0;
+  }
+  
+  .titulo {
+    padding: 0 10px;
+    gap: 15px;
+  }
+  
+  .logo img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .botao-reservas a,
+  .botao-salas a,
+  .logout a {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .page-title {
+    font-size: 1.8rem;
+  }
+  
+  .page-subtitle {
+    font-size: 0.95rem;
+  }
+  
+  main {
+    padding: 20px 10px;
+  }
+  
+  .topo {
+    padding: 25px 15px;
+  }
+  
+  .room-card {
+    padding: 20px 15px;
+  }
+  
+  .room-name {
+    font-size: 1.4rem;
+  }
+  
+  .room-floor {
+    font-size: 0.9rem;
+    padding: 5px 12px;
+  }
+  
+  .room-features {
+    gap: 8px;
+  }
+  
+  .feature-tag {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
+  
+  .reserve-button {
+    padding: 14px 18px;
+    font-size: 0.95rem;
+  }
+  
+  .empty-state {
+    padding: 40px 20px;
+  }
+  
+  .empty-state-icon {
+    font-size: 3.5rem;
+  }
+  
+  .empty-state-title {
+    font-size: 1.4rem;
+  }
+}
+
+/* Navegação para mobile */
+@media (max-width: 600px) {
+  .titulo {
+    flex-wrap: wrap;
+  }
+  
+  .logo {
+    order: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .botao-reservas {
+    order: 2;
+    flex: 1;
+  }
+  
+  .botao-salas {
+    order: 3;
+    flex: 1;
+  }
+  
+  .logout {
+    order: 4;
+    flex: 1;
+  }
+}
+
+/* Melhorias de acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles para acessibilidade */
+.botao-reservas a:focus,
+.botao-salas a:focus,
+.logout a:focus {
+  outline: 3px solid rgba(241, 232, 220, 0.8);
+  outline-offset: 3px;
+}
+
+.logo img:focus {
+  outline: 2px solid rgba(241, 232, 220, 0.8);
+  outline-offset: 2px;
+}
+
+.reserve-button:focus {
+  outline: 3px solid rgba(241, 232, 220, 0.8);
+  outline-offset: 3px;
+}
+
+/* Estados de hover para melhor UX */
+@media (hover: hover) {
+  .logo img:hover {
+    transform: scale(1.05) rotate(2deg);
+  }
+  
+  .room-card:hover .feature-tag {
+    transform: translateY(-2px);
+  }
+  
+  .room-card:hover .room-floor {
+    background: rgba(74, 90, 99, 0.15);
+  }
+}
+
+/* Estados de carregamento */
+.rooms-grid.loading .room-card {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.rooms-grid.loading .room-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  header {
+    background: white !important;
+    border-bottom: 1px solid #ccc !important;
+  }
+  
+  .titulo {
+    color: black !important;
+  }
+  
+  .topo {
+    background: white !important;
+    border: 1px solid #ccc !important;
+  }
+  
+  .page-title,
+  .page-subtitle {
+    color: black !important;
+  }
+  
+  .room-card {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+  
+  .reserve-button {
+    background: #333 !important;
+    color: white !important;
+  }
+}

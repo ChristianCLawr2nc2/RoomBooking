@@ -1,23 +1,16 @@
-DO $$
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'tipo_usuario') THEN
-    CREATE TYPE tipo_usuario AS ENUM ('admin', 'usuario');
-  END IF;
-END $$;
-
 CREATE TABLE IF NOT EXISTS usuario (
   id SERIAL PRIMARY KEY,
   nome VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL,
-  tipo tipo_usuario NOT NULL
+  senha VARCHAR(255) NOT NULL
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_usuario_email ON usuario(email);
 
 CREATE TABLE IF NOT EXISTS sala (
   sala_id SERIAL PRIMARY KEY,
-  numero TEXT NOT NULL UNIQUE,
-  andar TEXT NOT NULL,
+  numero VARCHAR(10) NOT NULL UNIQUE,
+  andar VARCHAR(10) NOT NULL,
   disponivel BOOLEAN DEFAULT TRUE
 );
 
@@ -26,17 +19,17 @@ CREATE TABLE IF NOT EXISTS reserva (
   usuario_id INTEGER NOT NULL,
   sala_id INTEGER NOT NULL,
   dia DATE NOT NULL,
-  data_solicitacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  tempo INTERVAL NOT NULL,
+  horario TIME NOT NULL,
+  duracao INTERVAL NOT NULL,
   FOREIGN KEY (sala_id) REFERENCES sala(sala_id),
   FOREIGN KEY (usuario_id) REFERENCES usuario(id),
-  UNIQUE(sala_id, dia, tempo)
+  UNIQUE(sala_id, dia, horario)
 );
 
-INSERT INTO usuario (nome, email, tipo) VALUES
-('Alice Silva', 'alice@empresa.com', 'admin'),
-('Bruno Lima', 'bruno@empresa.com', 'usuario'),
-('Carla Souza', 'carla@empresa.com', 'usuario');
+INSERT INTO usuario (nome, email, senha) VALUES
+('Alice Silva', 'alice@empresa.com', 'senha123'),
+('Bruno Lima', 'bruno@empresa.com', 'senha123'),
+('Carla Souza', 'carla@empresa.com', 'senha123');
 
 INSERT INTO sala (numero, andar, disponivel) VALUES
 ('R01', '1º andar', TRUE),
@@ -44,19 +37,19 @@ INSERT INTO sala (numero, andar, disponivel) VALUES
 ('R03', '2º andar', TRUE),
 ('R04', '2º andar', TRUE);
 
-INSERT INTO reserva (usuario_id, sala_id, dia, tempo) VALUES
-(1, 1, '2025-05-25', '2 hours'),
-(2, 2, '2025-05-25', '1 hour'),
-(3, 4, '2025-05-26', '2 hours');
+INSERT INTO reserva (usuario_id, sala_id, dia, duracao, horario) VALUES
+(1, 1, '2025-05-25', '2 hours', '10:00'),
+(2, 2, '2025-05-25', '1 hour', '11:00'),
+(3, 4, '2025-05-26', '2 hours', '12:00');
 
 SELECT
   u.nome AS nome_usuario,
   s.numero AS numero_sala,
   s.andar,
   r.dia,
-  r.tempo,
-  r.data_solicitacao
+  r.duracao,
+  r.horario
 FROM reserva r
 JOIN usuario u ON r.usuario_id = u.id
 JOIN sala s ON r.sala_id = s.sala_id
-ORDER BY r.dia, r.tempo;
+ORDER BY r.dia, r.duracao;

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Room Booking</title>
+  <link rel="stylesheet" href="/css/login/style.css">
+</head>
+<body>
+  <header>
+    <img src="/assets/logo.png" alt="Logo do Room Booking">
+  </header>
+  
+  <main>
+    <div class="card-login">
+      <h2 class="titulo-login">Login</h2>
+      
+      <% if (error) { %>
+        <p class="error-message"><%= error %></p>
+      <% } %>
+      
+      <form method="POST" action="/login" class="login-form">
+        <div class="input-group">
+          <label for="email" class="input-label">E-mail</label>
+          <input type="email" id="email" name="email" class="input-field" required autocomplete="email">
+        </div>
+        
+        <div class="input-group">
+          <label for="senha" class="input-label">Senha</label>
+          <input type="password" id="senha" name="senha" class="input-field" required autocomplete="current-password">
+        </div>
+        
+        <button type="submit" class="login-button">Entrar</button>
+      </form>
+      
+      <div class="help-section">
+        <a href="/registro" class="register-link">Criar nova conta</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

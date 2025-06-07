@@ -1,38 +1,70 @@
-<h2>Lista de Salas</h2>
-<table id="salasTable" border="1">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Número</th>
-      <th>Andar</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td colspan="3">Carregando...</td></tr>
-  </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salas - Room Booking</title>
+  <link rel="stylesheet" href="/css/salas/style.css">
+</head>
+<body>
+  <header>
+        <div class="titulo">  
+            <div class="logo">
+                <img src="/assets/logo.png" alt="Logo do Room Booking">
+            </div>
 
-<script>
-  async function carregarSalas() {
-    const res = await fetch('/api/salas');
-    const salas = await res.json();
-    const tbody = document.querySelector('#salasTable tbody');
-    tbody.innerHTML = '';
+            <div class="botao-reservas">
+                <a href="/reservas">Reservas</a>
+            </div>
+            <div class="botao-salas">
+                <a href="/salas">Salas</a>
+            </div>
+            <div class="logout">
+                <a href="/login">Sair</a>
+            </div>
+        </div>
+  </header>
 
-    if (salas.length > 0) {
-      salas.forEach(sala => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${sala.sala_id}</td>
-          <td>${sala.numero}</td>
-          <td>${sala.andar}</td>
-        `;
-        tbody.appendChild(row);
-      });
-    } else {
-      tbody.innerHTML = '<tr><td colspan="3">Nenhuma sala encontrada.</td></tr>';
-    }
-  }
+  <main>
+    <div class="topo">
+      <h1 class="page-title">Salas Disponíveis</h1>
+      <p class="page-subtitle">Escolha uma sala para fazer sua reserva</p>
+    </div>
 
-  carregarSalas();
-</script>
+
+      <% if (error) { %>
+        <div class="error-message">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <% if (salas && salas.length > 0) { %>
+        <div class="rooms-grid">
+          <% salas.forEach(sala => { %>
+            <div class="room-card">
+              <div class="room-header">
+                <div class="room-info">
+                  <div class="room-name">Sala <%= sala.numero %></div>
+                  <div class="room-floor"><%= sala.andar %></div>
+                </div>
+              </div>
+
+              <div class="room-details">
+                <div class="room-features">
+                  <span class="feature-tag">Wi-Fi</span>
+                  <span class="feature-tag">Ar Condicionado</span>
+                </div>
+              </div>
+
+              <a href="/nova_reserva?sala_id=<%= sala.sala_id %>" class="reserve-button">Reservar Sala</a>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <div class="empty-state-title">Nenhuma sala disponível</div>
+        </div>
+      <% } %>
+    </main>
+</body>
+</html>
