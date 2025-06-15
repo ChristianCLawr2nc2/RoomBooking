@@ -5,7 +5,7 @@
 
 ## Room Booking - Web Project
 
-![Logo do Projeto](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Logo/logo.png)
+![Logo do Projeto](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Logo/logosite.png)
 
 #### Autor do projeto
 - <a href="http://www.linkedin.com/in/christian-de-carvalho-lawrence">Christian De Carvalho Lawrence</a>

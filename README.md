@@ -2,7 +2,7 @@
 
 # 📌 Sistema de Gerenciamento de Reservas de Salas
 
-![Room Booking - Web Project](https://github.com/ChristianCLawr2nc2/Projeto-Individual---M2/blob/main/document/assets/Logo/logo.png)
+![Room Booking - Web Project](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/document/assets/Logo/logosite.png)
 
 ---
 
@@ -23,7 +23,6 @@ Este projeto é uma forma de aplicar conhecimentos de front-end, back-end e aind
 ## 📁 Estrutura de pastas
 ```plaintext
 ROOMBOOKING/
-├── assets/
 ├── config/
 ├── controllers/
 ├── documents/
@@ -48,14 +47,13 @@ ROOMBOOKING/
 ├── package.json
 ├── README.md
 ├── rest.http
-└── server.js
 ```
 ---
 
 ## 🚀 Tecnologias Utilizadas
-- **Frontend:** 
-- **Backend:** 
-- **Banco de Dados:** 
+- **Frontend:** - HTML5, CSS3, Tailwindcss, EJS
+- **Backend:**  - JavaScript
+- **Banco de Dados:**  - SQL, PostgreSQL, Supabase
 
 ---
 
