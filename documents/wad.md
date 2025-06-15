@@ -391,7 +391,7 @@ Requisições assíncronas utilizando Fetch API ou Axios (se aplicável).
 *VIDEO: Insira o link do vídeo demonstrativo nesta seção*
 *Descreva e ilustre aqui o desenvolvimento do sistema web completo, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
 
-![Vídeo demonstrativo do site](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/capturas/VideoDemonstrativo.MP4)
+*Link para o vídeo demonstrativo:* https://drive.google.com/file/d/1kV7oatUq83AIXbJxp0N4llXPQ9qHjCsK/view?usp=sharing
 
  1. Estrutura da Arquitetura MVC (início do vídeo)
 
