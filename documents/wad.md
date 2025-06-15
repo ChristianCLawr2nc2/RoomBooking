@@ -20,7 +20,7 @@
 
 <br>
 
-## <a name="c1"></a>1. Introdução (Semana 01)
+## <a name="c1"></a>1. Introdução
 
 O que o sistema em questão visa tornar mais fácil o agendamento e reserva de salas, em universidades por exemplo. Isso porque, existem estudantes e professores que precisam de determinada sala para uma reunião, estudo em grupo ou até mesmo uma apresentação, porém, têm dificuldades em torno disso devido à organização da mesma pois os processos de reserva de sala são desorganizados, no entanto, manual ou mal distribuídos.
 Para isso, a solução proposta é o desenvolvimento de uma aplicação web simples e clara que permitiria aos usuários consultar salas em tempo real que estão disponíveis, agendar, de inserir e cancelar agendamento. Ele também fará um painel administrativo que será destinado a ser utilizado pelos responsáveis pelas salas para alimentar horários e aprovações.
@@ -30,9 +30,7 @@ Este projeto é uma forma de aplicar conhecimentos de front-end, back-end e aind
 
 ## <a name="c2"></a>2. Visão Geral da Aplicação Web
 
-### 2.1. Personas (Semana 01)
-
-*Posicione aqui sua(s) Persona(s) em forma de texto markdown com imagens, ou como imagem de template preenchido. Atualize esta seção ao longo do módulo se necessário.*
+### 2.1. Personas
 
 ![Persona - Amanda Costa](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/persona/persona-pi.png)
 
@@ -58,9 +56,7 @@ Este projeto é uma forma de aplicar conhecimentos de front-end, back-end e aind
 
 ## <a name="c3"></a>3. Projeto da Aplicação Web
 ---
-### 3.1. Modelagem do banco de dados  (Semana 3)
-
-*Posicione aqui os diagramas de modelos relacionais do seu banco de dados, apresentando todos os esquemas de tabelas e suas relações. Utilize texto para complementar suas explicações, se necessário.*
+### 3.1. Modelagem do banco de dados
 
 ![Diagrama de tabelas do banco de dados](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/modelo-banco/modelo-banco.png)
 
@@ -130,7 +126,7 @@ JOIN sala s ON r.sala_id = s.sala_id
 ORDER BY r.dia, r.tempo;
 ````
 ---
-### 3.1.1 BD e Models (Semana 5)
+### 3.1.1 BD e Models
 
 ---
 
@@ -217,7 +213,7 @@ updateUser(id, dados)
 
 deleteUser(id)
 
-### 3.2. Arquitetura (Semana 5)
+### 3.2. Arquitetura
 
 ---
 
@@ -240,7 +236,7 @@ Essa é a camada View que concretiza a visualização da interface para o usuár
 
 ---
 
-### 3.3. Wireframes (Semana 03)
+### 3.3. Wireframes
 
 ![Wireframe Completo](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Wireframe/wireframe.png)
 
@@ -252,7 +248,7 @@ Essa é a camada View que concretiza a visualização da interface para o usuár
 
 ![Tela de Visualização das Reservas](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/Wireframe/4.png)
 
-### 3.4. Guia de estilos (Semana 05)
+### 3.4. Guia de estilos
 
 ![Mini guia de estilos](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/estilos/mini-guia-de-estilos.png)
 
@@ -260,7 +256,7 @@ Essa é a camada View que concretiza a visualização da interface para o usuár
 
 
 
-### 3.5. Protótipo de alta fidelidade (Semana 05)
+### 3.5. Protótipo de alta fidelidade
 
 ![Tela de Login](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/prototipo/login.png)
 
@@ -272,7 +268,7 @@ Essa é a camada View que concretiza a visualização da interface para o usuár
 
 [Link de Protótipo no Figma](https://www.figma.com/design/ui33OggzNK9Z0dYD8Ws81B/PAF?node-id=0-1&p=f&t=bCsRVbXvzJZOUZ15-0)
 
-### 3.6. WebAPI e endpoints (Semana 05)
+### 3.6. WebAPI e endpoints
 
 # 📚 Explicação dos Endpoints do Sistema de Gerenciamento de Salas
 
@@ -340,9 +336,8 @@ Essa é a camada View que concretiza a visualização da interface para o usuár
   });
 
 
-### 3.7 Interface e Navegação (Semana 07)
+### 3.7 Interface e Navegação
 
-*Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
 1. Tecnologias Utilizadas
 
 HTML5 e CSS3 para a estrutura e estilo das páginas.
@@ -396,18 +391,151 @@ Requisições assíncronas utilizando Fetch API ou Axios (se aplicável).
 *VIDEO: Insira o link do vídeo demonstrativo nesta seção*
 *Descreva e ilustre aqui o desenvolvimento do sistema web completo, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
 
-### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
+![Vídeo demonstrativo do site](https://github.com/ChristianCLawr2nc2/RoomBooking/blob/main/documents/assets/capturas/VideoDemonstrativo.MP4)
 
-*Indique pontos fortes e pontos a melhorar de maneira geral.*
-*Relacione também quaisquer outras ideias que você tenha para melhorias futuras.*
+ 1. Estrutura da Arquitetura MVC (início do vídeo)
+
+O vídeo inicia com a exibição da estrutura de pastas do projeto no VS Code, destacando a separação em três camadas:
+
+Controllers/
+
+Models/
+
+Views/
+
+Routes/
+
+Essa divisão mostra claramente o uso do padrão MVC (Model-View-Controller), promovendo organização e separação de responsabilidades.
+
+🧠 2. Abertura do authController.js (Controller)
+
+O vídeo mostra o arquivo controllers/authController.js.
+
+Neste controller, é possível visualizar a função responsável por criar novos registros de usuários. Essa função:
+
+Recebe os dados do formulário (nome, email, senha, etc.).
+
+Faz validações básicas (ex: checagem de campos).
+
+Chama o Model para salvar os dados no banco.
+
+Retorna uma resposta (renderizando uma view ou redirecionando).
+
+Mensagem na tela sugerida:
+
+“Controlador responsável pela lógica do cadastro de usuários. Ele recebe os dados do formulário e os envia ao banco.”
+
+📦 3. Abertura do registro.js em Models (Model)
+
+Em seguida, o vídeo exibe o arquivo models/registro.js.
+
+Este model representa a estrutura dos dados de usuário que serão armazenados no banco de dados PostgreSQL. Ele define campos como:
+
+nome
+
+email
+
+senha
+
+Mensagem na tela sugerida:
+
+“Model do usuário, responsável por mapear os dados no banco. Ele define os campos e sua estrutura.”
+
+🌐 4. Abertura do registro.js em Routes (Rota)
+
+Depois, o vídeo mostra routes/registro.js.
+
+Este arquivo define a rota para acesso ao cadastro, normalmente com algo como:
+
+router.get('/registro', controller.exibirFormulario);
+
+router.post('/registro', controller.processarCadastro);
+
+Ele conecta os endpoints às funções declaradas no authController.
+
+Mensagem na tela sugerida:
+
+“Arquivo de rotas que define os caminhos para exibir o formulário de cadastro e processar os dados enviados.”
+
+🖼️ 5. Abertura do registro.ejs (View)
+
+Por fim, o vídeo abre views/registro.ejs.
+
+Este é o arquivo da view responsável por renderizar o formulário de cadastro de usuário. O formulário contém os campos:
+
+Nome
+
+Email
+
+Senha
+
+Confirmação de senha (se houver)
+
+E possui um botão de envio (submit) que dispara a requisição POST para o back-end.
+
+Mensagem na tela sugerida:
+
+“View EJS que renderiza o formulário de cadastro. Ela se comunica com o controller através da rota configurada.”
+
+✅ 6. Fluxo Geral (visualmente demonstrado ao longo do vídeo)
+
+O vídeo deixa clara a comunicação entre as camadas:
+
+O usuário acessa /registro → rota GET
+
+O formulário é exibido → view EJS
+
+O usuário preenche os dados e envia → rota POST
+
+O controller processa os dados e interage com o model → salva no banco
+
+O sistema retorna uma resposta visual (como redirecionamento ou renderização de mensagem)
+
+---
+
+### 4.2 Conclusões e Trabalhos Futuros
+
+4.2 Funcionalidades do Sistema
+O sistema RoomBooking foi desenvolvido com foco em atender instituições educacionais que necessitam de controle sobre reservas de salas. Abaixo estão listadas as principais funcionalidades implementadas e previstas para desenvolvimento.
+
+✅ Funcionalidades Atuais
+Autenticação de Usuário:
+Login seguro via interface web, com redirecionamento para a tela de reservas após autenticação.
+
+Cadastro e Edição de Reservas:
+Usuários autenticados podem cadastrar reservas com data, horário e sala, além de editar reservas existentes (desde que não entrem em conflito com outras).
+
+Visualização de Reservas:
+Interface permite visualizar todas as reservas em uma tabela com horários, datas e responsáveis.
+
+Validação de Conflitos:
+Impede reservas duplicadas em mesma sala, data e horário.
+
+Remoção de Reservas:
+Usuários podem excluir suas próprias reservas de forma simples pela interface.
+
+🔄 Funcionalidades Futuras (Planejadas)
+Transferência de Reserva:
+Permitir que um usuário transfira uma reserva existente para outro usuário autorizado, mantendo o controle e histórico da ação.
+
+Perfil e Interface de Administrador:
+Implementar uma interface dedicada para administradores, com permissões ampliadas para gestão de usuários, salas e reservas.
+
+Cancelamento de Reservas pelo Administrador:
+Adicionar a capacidade de o administrador cancelar qualquer reserva, inclusive em nome de outros usuários, com motivos documentados.
 
 
 
 ## <a name="c5"></a>5. Referências
 
-_Incluir as principais referências de seu projeto, para que seu parceiro possa consultar caso ele se interessar em aprofundar. Um exemplo de referência de livro e de site:_<br>
+Documentações oficiais:
 
----
+https://expressjs.com/
+
+https://nodejs.org/
+
+https://www.postgresql.org/docs/
+
 ---
 
 
